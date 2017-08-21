@@ -41,8 +41,13 @@
     <%--<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap-combobox.js"></script>--%>
     <%--<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.twbsPagination.js"></script>--%>
     <%--<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.mask.js"></script>--%>
+
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/content.css">
 </head>
 <body>
-    Good!
+    <a id="home_image" class="button" href="${pageContext.request.contextPath}/ru/top">
+        <img id="logo" src="<c:url value='/images/a1.jpg'/>"/>
+        <img id="name" src="<c:url value='/images/ArtBoost.png'/>"/>
+    </a>
 </body>
 </html>

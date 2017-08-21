@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-//@RequestMapping("/")
+@RequestMapping("/")
 public class PublicController {
 
 //    @Autowired
@@ -13,11 +13,11 @@ public class PublicController {
 
     @RequestMapping("/")
     public String root() {
-        return "/root";
+        return "/selectLanguage";
     }
 
-    @RequestMapping("/{language}/home")
+    @RequestMapping("/{language}/top")
     public String home(@PathVariable("language") String language) {
-        return "/public/" + language + "/home";
+        return "/" + language + "/top";
     }
 }

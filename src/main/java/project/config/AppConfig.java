@@ -90,20 +90,15 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-//        registry
-//                .addResourceHandler("/css/**")
-//                .addResourceLocations("/css/");
+        registry
+                .addResourceHandler("/css/**")
+                .addResourceLocations("/css/");
         registry
                 .addResourceHandler("/js/**")
                 .addResourceLocations("/js/");
-
-//        registry
-//                .addResourceHandler("/menuImages/**")
-//                .addResourceLocations("/menuImages/");
-
-//        registry
-//                .addResourceHandler("/shopImages/**")
-//                .addResourceLocations("/shopImages/");
+        registry
+                .addResourceHandler("/images/**")
+                .addResourceLocations("/images/");
     }
 
     @Bean
