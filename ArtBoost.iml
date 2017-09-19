@@ -3,13 +3,13 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="spring_boot_Application" name="Application" removed="true">
-          <file>file://$MODULE_DIR$/src/main/java/Application.java</file>
+        <fileset id="spring_boot_project.Application" name="Application" removed="true">
+          <file>file://$MODULE_DIR$/src/main/java/project/Application.java</file>
           <file>file://$MODULE_DIR$/src/main/resources/application.properties</file>
         </fileset>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/Application.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/config/AppConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/project/config/AppConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/project/Application.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -103,5 +103,7 @@
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.3.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.mail:mail:1.4.7" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
   </component>
 </module>

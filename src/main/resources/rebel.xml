@@ -1,0 +1,18 @@
+<!--
+  This is the JRebel configuration file. It maps the running application to your IDE workspace, enabling JRebel reloading for this project.
+  Refer to https://manuals.zeroturnaround.com/jrebel/standalone/config.html for more information.
+-->
+<application generated-by="maven" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://update.zeroturnaround.com/jrebel/rebel-2_1.xsd">
+	<classpath>
+		<dir name="P:/ProgKievUa/Progects/ArtBoost/target/classes">
+			<include name="application.properties"/>
+		</dir>
+		<dir name="P:/ProgKievUa/Progects/ArtBoost/src/main/resources">
+			<exclude name="**/application.yml"/>
+			<exclude name="**/application.properties"/>
+		</dir>
+		<dir name="P:/ProgKievUa/Progects/ArtBoost/target/classes">
+		</dir>
+	</classpath>
+
+</application>

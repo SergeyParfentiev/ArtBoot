@@ -1,5 +1,6 @@
 package project.config;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +13,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import project.interceptor.ExecuteTimeInterceptor;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -89,20 +89,46 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry
+                .addResourceHandler("/resources/css/**")
+                .addResourceLocations("/resources/css/");
 
         registry
-                .addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
+                .addResourceHandler("/resources/js/**")
+                .addResourceLocations("/resources/js/js/");
         registry
-                .addResourceHandler("/js/**")
-                .addResourceLocations("/js/");
-        registry
-                .addResourceHandler("/images/**")
-                .addResourceLocations("/images/");
+                .addResourceHandler("/resources/images/**")
+                .addResourceLocations("/resources/images/");
     }
 
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ExecuteTimeInterceptor());
+    }
+
+//    @Bean
+//    public FilterRegistrationBean myFilterBean() {
+//        final FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+//        filterRegBean.setFilter(new ResourcesFilter());
+//        filterRegBean.addUrlPatterns("/resources");
+//        filterRegBean.setEnabled(Boolean.TRUE);
+//        filterRegBean.setName("Menu Filter");
+//        filterRegBean.setAsyncSupported(Boolean.TRUE);
+//        return filterRegBean;
+//    }
+
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false);
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(false);
     }
 }

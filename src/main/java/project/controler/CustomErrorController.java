@@ -15,6 +15,7 @@ public class CustomErrorController implements ErrorController {
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public ModelAndView error(HttpServletRequest httpRequest) {
+        System.out.println("error");
         int httpErrorCode = getErrorCode(httpRequest);
         ModelAndView errorPage = new ModelAndView("/errors/" + httpErrorCode);
         String errorMsg = httpErrorCode + ": Такие вот дела";

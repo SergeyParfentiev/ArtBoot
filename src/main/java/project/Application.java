@@ -29,15 +29,15 @@ public class Application {
         };
     }
 
-    private byte[] getBytesFromFile(File file) {
-        byte[] imgData = null;
-        try {
-            imgData = Files.readAllBytes(file.toPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return imgData;
-    }
+//    private byte[] getBytesFromFile(File file) {
+//        byte[] imgData = null;
+//        try {
+//            imgData = Files.readAllBytes(file.toPath());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return imgData;
+//    }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
