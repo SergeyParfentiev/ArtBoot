@@ -6,11 +6,11 @@
 
 <div class="content">
     <div class="main_categories">
-        <div style="display: table-row">
+        <div style="">
             <div class="categories_menu">
-                <cl:categoryList categories="${list}" classParameter="nav categories_list"/>
+                <cl:categoryList categories="${currentMenu}" classParameter="nav categories_list" source="${source}"/>
             </div>
-            <div class="categories_content" style="max-width: 848px; text-align: center">
+            <div class="categories_content" style="max-width: 848px; text-align: left; background-color: gray">
                 <%--<div class="media_content">--%>
                     <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
                 <%--</div>--%>
@@ -30,7 +30,7 @@
                     <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
                 <%--</div>--%>
                 <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
+                <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
                 <%--</div>--%>
                 <%--<div class="media_content">--%>
                     <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
@@ -52,32 +52,54 @@
     </div>
 </div>
 
-
+${source}
+${parameter}
+${param}
 <script>
     $(document).ready(function () {
-    setCategoriesWidth();
+        calculateChanges();
     });
 
-    window.onresize = function() {
+    $(window).on('resize', function() {
+        calculateChanges();
+    });
+    function calculateChanges() {
         setCategoriesWidth();
-    };
+        setFooterMargin()
+    }
 
     function setCategoriesWidth() {
         var windowWidth = $(window).width();
         var menuWidth = $(".categories_menu").width();
-        var mediaContentWidth = $(".media_content").width();
+        var mediaWidth = $(".media_content").width();
         var category = $(".categories_content");
-        var elementList = category.find(".media_content");
-
         var realForContentWidth = windowWidth - menuWidth;
-
-        for(var i = 1; i < elementList.length; i++) {
-            var width = i * mediaContentWidth + (i - 1) * 4;
+        var maxMediaNumber = 3;
+        var mediaBorder = 4;
+        var setNewWidth = false;
+        var width;
+        for(var i = 1; i <= maxMediaNumber; i++) {
+            width = i * mediaWidth + (i - 1) * mediaBorder;
             if(width > realForContentWidth) {
-                category.width(width - mediaContentWidth);
+                category.width(width - mediaWidth - mediaBorder);
+                setNewWidth = true;
                 break;
             }
         }
+
+        if(!setNewWidth) {
+            category.width(width);
+        }
+    }
+
+    function setFooterMargin() {
+        var windowHeight = $(document).height();
+        var content = $(".content");
+        var footer = $(".footer");
+        var contentHeight = content.height();
+        var footerMargin = windowHeight - contentHeight - footer.height()
+                - parseInt(content.css("margin-top")) - parseInt(content.css("margin-bottom"));
+        footer.css("margin-top", footerMargin + "px");
     }
 </script>
 <jsp:include page="bottom.jsp"/>

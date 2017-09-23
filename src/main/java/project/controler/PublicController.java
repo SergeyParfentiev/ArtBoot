@@ -18,6 +18,12 @@ import java.util.Map;
 @RequestMapping("/")
 public class PublicController {
 
+    private static String ALL_MENU = "allMenu";
+    private static String CURRENT_MENU = "currentMenu";
+    private static String SOURCE = "source";
+    private static String VIDEOS = "videos";
+    private static String AUTHORS = "authors";
+
     @Autowired
     private CategoryService categoryService;
 
@@ -33,41 +39,67 @@ public class PublicController {
         categoryService.addCategory(category);*/
 
     @RequestMapping("/")
-    public String home(Model model) throws ClassNotFoundException {
+    public ModelAndView index(ModelAndView model) throws ClassNotFoundException {
         String parameter = "LoL";
-        model.addAttribute("parameter", parameter);
-        System.out.println("home");
-        List<CategoryDTO> list = categoryService.getCategoryListByLevel(0);
-        getSubCategories(list);
-//        for(CategoryDTO category : list) {
-//            getSubCategories(category);
-//        }
-        model.addAttribute("list", list);
-        return "/public/home";
+        model.addObject("parameter", parameter);
+        System.out.println("index");
+        List<CategoryDTO> allMenu = getAllCategories();
+        model.addObject(ALL_MENU, allMenu);
+        model.addObject(CURRENT_MENU, allMenu);
+        model.addObject(SOURCE, VIDEOS);
+        model.setViewName("/public/index");
+        return model;
     }
 
     @RequestMapping(value = "/videos/**", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView home2(HttpServletRequest request, ModelAndView model) throws ClassNotFoundException {
-        String parameter = "LoL";
-        model.addObject("parameter", parameter);
-        String[] pageNameArray = request.getRequestURI().replace("/videos/", "").split("/");
-        int level = 0;
-        int sourceIndex = 0;
-        for(String pageName : pageNameArray) {
-            CategoryDTO category = categoryService.getCategoryByPageNameLevelSourceIndex(pageName, level, sourceIndex);
-            if(category != null) {
-                System.out.println("name: " + category.getName() + " level: " + level + " sourceIndex: " + category.getSourceIndex());
-                level++;
-                sourceIndex = category.getIndex();
-            } else {
-                System.out.println("pageName: " + pageName);
-            }
+        String categoriesURI = request.getRequestURI().replace("/videos", "");
+        if(categoriesURI.startsWith("/")) {
+            categoriesURI = categoriesURI.substring(1);
         }
-        System.out.println();
-        System.out.println("home2");
-        model.setViewName("/public/home");
+        String[] pageNameArray = categoriesURI.split("/");
+        if(pageNameArray.length != 0 && !pageNameArray[0].equals("")) {
+            System.out.println(pageNameArray[0]);
+            int level = 0;
+            int sourceIndex = 0;
+            CategoryDTO category = null;
+            for (String pageName : pageNameArray) {
+                category = categoryService.getCategoryByPageNameLevelSourceIndex(pageName, level, sourceIndex);
+                if (category != null) {
+                    System.out.println("name: " + category.getName() + " level: " + level + " sourceIndex: " + category.getSourceIndex());
+                    level++;
+                    sourceIndex = category.getIndex();
+                } else {
+                    model.setViewName("/error");
+                    return model;
+                }
+            }
+
+            String parameter = pageNameArray[pageNameArray.length - 1];
+            model.addObject("parameter", parameter);
+            model.addObject("param", category.getPageName());
+            System.out.println();
+            System.out.println("home2");
+
+            model.addObject(ALL_MENU, getAllCategories());
+            model.addObject(SOURCE, VIDEOS);
+            model.setViewName("/public/index");
+
+        } else {
+            model.setViewName("/error");
+        }
         return model;
+    }
+
+    private List<CategoryDTO> getAllCategories() {
+        List<CategoryDTO> allMenu = categoryService.getCategoryListByLevel(0);
+        getSubCategories(allMenu);
+        return allMenu;
+    }
+
+    private List<CategoryDTO> getCurrentMenu() {
+        return null;
     }
 
     private void getSubCategories(CategoryDTO category) {

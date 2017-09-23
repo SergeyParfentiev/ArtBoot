@@ -17,10 +17,10 @@ public class CategoryDTO {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String pageName;
 
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class CategoryDTO {
     @Column
     private int sourceIndex;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int index;
 
     @Column

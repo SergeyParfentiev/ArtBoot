@@ -1,9 +1,12 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="cl" %>
 <html>
 <head>
     <title>ArtBoost</title>
-    <link rel="shortcut icon" href="<c:url value='/resources/images/favicon.ico'/>" type="image/x-icon">
+    <link rel="shortcut icon" href="<c:url value='/images/favicon.ico'/>" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png'">
     <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">--%>
     <%--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>--%>
     <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>--%>
@@ -11,7 +14,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/content.css?${startTime}2">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/content.css?${startTime}2">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
 <div class="header">
@@ -25,7 +29,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a id="logo">
-                    <img style="max-height: 50px" src="<c:url value='/resources/images/a1.jpg'/>"/><img style="max-height: 50px" src="<c:url value='/resources/images/ArtBoost.png'/>"/>
+                    <img style="max-height: 50px" src="<c:url value='/images/a1.jpg'/>"/><img style="max-height: 50px" src="<c:url value='/images/ArtBoost.png'/>"/>
                 </a>
             </div>
 
@@ -34,40 +38,8 @@
 
                 <ul class="nav navbar-nav categories_list_drop">
                     <li>
-                        <a href="#">Каталог товаров</a>
-                        <ul class="nav categories_list">
-                            <li>
-                                <a href="#">Sub Menu 1</a>
-                                <%--<i class="glyphicon glyphicon-chevron-right">--%>
-                                <ul>
-                                    <li>
-                                        <a href="#">Deep Menu 1</a>
-                                        <ul>
-                                            <li><a href="#">Sub Deep 1</a></li>
-                                            <li><a href="#">Sub Deep 2</a></li>
-                                            <li><a href="#">Sub Deep 3</a></li>
-                                            <li><a href="#">Sub Deep 4</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Sub Menu 2</a></li>
-                            <li><a href="#">Sub Menu 3</a></li>
-                            <li><a href="#">Sub Menu 4</a>
-                                <ul>
-                                    <li><a href="#">Deep Menu 1</a>
-                                        <ul>
-                                            <li><a href="#">Sub Deep 1</a></li>
-                                            <li><a href="#">Sub Deep 2</a></li>
-                                            <li><a href="#">Sub Deep 3</a></li>
-                                            <li><a href="#">Sub Deep 4</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Deep Menu 2</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Sub Menu 5</a></li>
-                        </ul>
+                        <a class="category_list_container" href="#">Каталог товаров</a>
+                        <cl:categoryList categories="${allMenu}" classParameter="nav categories_list" source="${source}"/>
                     </li>
                 </ul>
                 <div class="col-sm-3 col-md-3">
@@ -80,6 +52,7 @@
                         </div>
                     </form>
                 </div>
+                <div class="console"></div>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Link</a></li>
                     <li class="dropdown">

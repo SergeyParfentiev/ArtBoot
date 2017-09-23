@@ -90,15 +90,23 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/resources/css/**")
-                .addResourceLocations("/resources/css/");
-
+                .addResourceHandler("/css/**")
+                .addResourceLocations("/css/");
         registry
-                .addResourceHandler("/resources/js/**")
-                .addResourceLocations("/resources/js/js/");
+                .addResourceHandler("/js/**")
+                .addResourceLocations("/js/js/");
         registry
-                .addResourceHandler("/resources/images/**")
-                .addResourceLocations("/resources/images/");
+                .addResourceHandler("/images/**")
+                .addResourceLocations("/images/");
+        registry
+                .addResourceHandler("/apple-touch-icon.png")
+                .addResourceLocations("/images/apple-touch-icon.png");
+        registry
+                .addResourceHandler("/apple-touch-icon-precomposed.png")
+                .addResourceLocations("/images/apple-touch-icon-precomposed.png");
+        registry
+                .addResourceHandler("/favicon.ico")
+                .addResourceLocations("/images/favicon.ico");
     }
 
     @Bean
