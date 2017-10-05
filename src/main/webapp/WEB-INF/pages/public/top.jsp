@@ -3,8 +3,8 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="cl" %>
 <html>
 <head>
-    <title>ArtBoost</title>
-    <link rel="shortcut icon" href="<c:url value='/images/favicon.ico'/>" type="image/x-icon">
+    <title>Wall of Arts</title>
+    <link rel="shortcut icon" href="<c:url value='/images/favicon.ico'/>?${startTime}" type="image/x-icon">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png'">
     <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">--%>
@@ -14,14 +14,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/content.css?${startTime}2">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/content.css?${startTime}">
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
 <div class="header">
-        <nav class="navbar navbar-default" role="navigation">
+        <nav class="navbar navbar-default" role="navigation" style="box-shadow: 0 10px 10px #DFE1F0; border: 0">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <div class="navbar-header" style="margin-top: 5px;">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a id="logo">
-                    <img style="max-height: 50px" src="<c:url value='/images/a1.jpg'/>"/><img style="max-height: 50px" src="<c:url value='/images/ArtBoost.png'/>"/>
+                    <img style="max-height: 40px; margin: auto 0;" src="<c:url value='/images/icon.png'/>"/><img style="max-height: 40px" src="<c:url value='/images/name.png'/>"/>
                 </a>
             </div>
 
@@ -38,11 +38,16 @@
 
                 <ul class="nav navbar-nav categories_list_drop">
                     <li>
-                        <a class="category_list_container" href="#">Каталог товаров</a>
-                        <cl:categoryList categories="${allMenu}" classParameter="nav categories_list" source="${source}"/>
+                        <a class="category_list_container"  href="#">
+                            <div class="category_name" style="text-align: center">Каталог товаров</div>
+                            <div class="pointer">
+                                <div style="vertical-align: middle" class="glyphicon glyphicon-chevron-down"></div>
+                            </div>
+                        </a>
+                        <cl:categoryList categories="${all_menu}" classParameter="nav categories_list" source="${all_menu_source}"/>
                     </li>
                 </ul>
-                <div class="col-sm-3 col-md-3">
+                <div class="col-sm-3 col-md-2">
                     <form class="navbar-form" role="search">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="q">
@@ -52,19 +57,26 @@
                         </div>
                     </form>
                 </div>
-                <div class="console"></div>
+                <%--<div class="console"></div>--%>
+                <ul class="nav navbar-nav">
+                    <img style="width: 40px; height: 40px" src="<c:url value="/images/buket.png"/>">
+                </ul>
+                <ul class="nav navbar-nav">
+                    <div style="font-size: 40px" class="glyphicon glyphicon-shopping-cart"></div>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                        </ul>
-                    </li>
+                    <li><a class="hover-efekt" href="#">Войти</a></li>
+                    <li><a class="hover-efekt" href="#">Зарегистрироваться</a></li>
+                    <%--<li class="dropdown">--%>
+                        <%--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>--%>
+                        <%--<ul class="dropdown-menu">--%>
+                            <%--<li><a href="#">Action</a></li>--%>
+                            <%--<li><a href="#">Another action</a></li>--%>
+                            <%--<li><a href="#">Something else here</a></li>--%>
+                            <%--<li class="divider"></li>--%>
+                            <%--<li><a href="#">Separated link</a></li>--%>
+                        <%--</ul>--%>
+                    <%--</li>--%>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -148,6 +160,21 @@
         <%--<div id="header_logo">--%>
             <%--<img src="<c:url value='/images/a1.jpg'/>"/>--%>
         <%--</div>--%>
+
+    <div class="breadcrumbs">
+        <ol class="arrows">
+            <c:forEach items="${breadcrumbsPath}" var="path" varStatus="status">
+                <c:choose>
+                    <c:when test="${breadcrumbsPath.size() != status.count}">
+                        <li><a href="${pageContext.request.contextPath}${path.key}">${path.value}</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a>${path.value}</a></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </ol>
     </div>
+</div>
 
 <%--${"param"}--%>

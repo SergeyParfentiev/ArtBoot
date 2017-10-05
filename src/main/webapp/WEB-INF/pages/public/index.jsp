@@ -4,57 +4,9 @@
 
 <jsp:include page="top.jsp"/>
 
-<div class="content">
-    <div class="main_categories">
-        <div style="">
-            <div class="categories_menu">
-                <cl:categoryList categories="${currentMenu}" classParameter="nav categories_list" source="${source}"/>
-            </div>
-            <div class="categories_content" style="max-width: 848px; text-align: left; background-color: gray">
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-                <%--<div class="media_content">--%>
-                    <%--<iframe width="280" height="230" src="https://www.youtube.com/embed/fxnf1lIIepw" frameborder="0" allowfullscreen></iframe>--%>
-                <%--</div>--%>
-            </div>
-        </div>
-    </div>
+<div class="content"">
+    <jsp:include page="ajaxIndex.jsp"/>
 </div>
-
-${source}
-${parameter}
-${param}
 <script>
     $(document).ready(function () {
         calculateChanges();
@@ -65,7 +17,10 @@ ${param}
     });
     function calculateChanges() {
         setCategoriesWidth();
-        setFooterMargin()
+//        setFooterMargin();
+//        setHeaderSize();
+        setHeaderSize();
+        setBreadCrumbsSize();
     }
 
     function setCategoriesWidth() {
@@ -78,6 +33,9 @@ ${param}
         var mediaBorder = 4;
         var setNewWidth = false;
         var width;
+        if(mediaWidth == null) {
+            mediaWidth = 280;
+        }
         for(var i = 1; i <= maxMediaNumber; i++) {
             width = i * mediaWidth + (i - 1) * mediaBorder;
             if(width > realForContentWidth) {
@@ -99,7 +57,29 @@ ${param}
         var contentHeight = content.height();
         var footerMargin = windowHeight - contentHeight - footer.height()
                 - parseInt(content.css("margin-top")) - parseInt(content.css("margin-bottom"));
-        footer.css("margin-top", footerMargin + "px");
+        footer.css("margin-top", footerMargin);
+    }
+
+    function setBreadCrumbsSize() {
+        var mainCategories = $(".main_categories");
+        var mainCategoriesMargin = parseInt(mainCategories.css("margin-left"));
+        var mainCategoriesWidth = mainCategories.width();
+        var breadCrumb = $(".breadcrumbs");
+        var navbarHeight = $(".navbar").height();
+        breadCrumb.css("margin-top", navbarHeight + 20);
+        breadCrumb.width(mainCategoriesWidth);
+        breadCrumb.css("margin-left", mainCategoriesMargin);
+        breadCrumb.css("margin-right", mainCategoriesMargin);
+    }
+
+    function setHeaderSize() {
+        var mainCategories = $(".main_categories");
+        var mainCategoriesMargin = parseInt(mainCategories.css("margin-left"));
+        var mainCategoriesWidth = mainCategories.width();
+        var navbar = $(".navbar");
+        navbar.width(mainCategoriesWidth);
+        navbar.css("margin-left", mainCategoriesMargin);
+        navbar.css("margin-right", mainCategoriesMargin);
     }
 </script>
 <jsp:include page="bottom.jsp"/>

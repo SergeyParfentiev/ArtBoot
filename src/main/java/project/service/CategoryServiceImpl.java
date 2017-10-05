@@ -22,22 +22,42 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryByLevelSourceIndex(int level, int sourceIndex) {
-        return categoryRepository.getByLevelSourceIndex(level, sourceIndex);
+    public CategoryDTO getByLevelAndSourceIndex(int level, int sourceIndex) {
+        return categoryRepository.getByLevelAndSourceIndex(level, sourceIndex);
     }
 
     @Override
-    public CategoryDTO getCategoryByPageNameLevelSourceIndex(String pageName, int level, int sourceIndex) {
-        return categoryRepository.getByPageNameLevelSourceIndex(pageName, level, sourceIndex);
+    public List<CategoryDTO> getListPreCategoriesBySourceIndex(int sourceIndex) {
+        return categoryRepository.getListPreCategoriesBySourceIndex(sourceIndex);
     }
 
     @Override
-    public List<CategoryDTO> getCategoryListByLevel(int level) {
+    public CategoryDTO getByPageNameAndLevelAndSourceIndex(String pageName, int level, int sourceIndex) {
+        return categoryRepository.getByPageNameAndLevelAndSourceIndex(pageName, level, sourceIndex);
+    }
+
+    @Override
+    public List<CategoryDTO> getListByLevel(int level) {
         return categoryRepository.getListByLevel(level);
     }
 
     @Override
     public List<CategoryDTO> getSubCategories(int sourceIndex) {
-        return categoryRepository.getSubCategories(sourceIndex);
+        return categoryRepository.getListSubCategories(sourceIndex);
+    }
+
+    @Override
+    public CategoryDTO getByPageName(String pageName) {
+        return categoryRepository.getByPageName(pageName);
+    }
+
+    @Override
+    public List<CategoryDTO> getListInSameLevel(int sourceIndex) {
+        return categoryRepository.getListInSameLevel(sourceIndex);
+    }
+
+    @Override
+    public List<CategoryDTO> getListByPageNameList(List<String> pageNameList){
+        return categoryRepository.getListByPageNameList(pageNameList);
     }
 }

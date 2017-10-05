@@ -16,7 +16,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import project.interceptor.ExecuteTimeInterceptor;
+import project.interceptor.PrepareDataInterceptor;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -116,7 +116,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ExecuteTimeInterceptor());
+        registry.addInterceptor(new PrepareDataInterceptor());
     }
 
 //    @Bean

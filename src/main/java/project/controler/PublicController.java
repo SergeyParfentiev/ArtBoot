@@ -2,7 +2,6 @@ package project.controler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import project.dto.CategoryDTO;
@@ -12,17 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/")
 public class PublicController {
 
-    private static String ALL_MENU = "allMenu";
-    private static String CURRENT_MENU = "currentMenu";
-    private static String SOURCE = "source";
-    private static String VIDEOS = "videos";
-    private static String AUTHORS = "authors";
+    public static String ALL_MENU = "all_menu";
+    public static String CURRENT_MENU = "current_menu";
+    public static String ALL_MENU_SOURCE = "all_menu_source";
+    public static String CURRENT_MENU_SOURCE = "current_menu_source";
+    public static String VIDEOS = "videos";
+    public static String AUTHORS = "authors";
 
     @Autowired
     private CategoryService categoryService;
@@ -39,61 +38,64 @@ public class PublicController {
         categoryService.addCategory(category);*/
 
     @RequestMapping("/")
-    public ModelAndView index(ModelAndView model) throws ClassNotFoundException {
+    public ModelAndView index(HttpServletRequest request, ModelAndView modelAndView) throws ClassNotFoundException {
         String parameter = "LoL";
-        model.addObject("parameter", parameter);
+        modelAndView.addObject("parameter", parameter);
         System.out.println("index");
-        List<CategoryDTO> allMenu = getAllCategories();
-        model.addObject(ALL_MENU, allMenu);
-        model.addObject(CURRENT_MENU, allMenu);
-        model.addObject(SOURCE, VIDEOS);
-        model.setViewName("/public/index");
-        return model;
+//        List<CategoryDTO> allMenuList = (List<CategoryDTO>)request.getAttribute(ALL_MENU);
+//        modelAndView.addObject(ALL_MENU, allMenuList);
+        modelAndView.addObject(CURRENT_MENU, request.getAttribute(ALL_MENU));
+        modelAndView.addObject(ALL_MENU_SOURCE, VIDEOS);
+        modelAndView.addObject(CURRENT_MENU_SOURCE, VIDEOS);
+        modelAndView.setViewName("/public/index");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/videos/**", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView home2(HttpServletRequest request, ModelAndView model) throws ClassNotFoundException {
+    public ModelAndView home2(HttpServletRequest request, ModelAndView modelAndView,
+                              @RequestParam(value = "ajax", required = false) boolean ajax) throws ClassNotFoundException {
+        System.out.println(ajax);
         String categoriesURI = request.getRequestURI().replace("/videos", "");
-        if(categoriesURI.startsWith("/")) {
+        if (categoriesURI.startsWith("/")) {
             categoriesURI = categoriesURI.substring(1);
         }
+
         String[] pageNameArray = categoriesURI.split("/");
-        if(pageNameArray.length != 0 && !pageNameArray[0].equals("")) {
+        List<CategoryDTO> categoriesToShow;
+        StringBuilder categoriesPath = new StringBuilder(VIDEOS);
+        if (!pageNameArray[0].equals("")) {
             System.out.println(pageNameArray[0]);
             int level = 0;
             int sourceIndex = 0;
             CategoryDTO category = null;
             for (String pageName : pageNameArray) {
-                category = categoryService.getCategoryByPageNameLevelSourceIndex(pageName, level, sourceIndex);
+                category = categoryService.getByPageNameAndLevelAndSourceIndex(pageName, level, sourceIndex);
                 if (category != null) {
-                    System.out.println("name: " + category.getName() + " level: " + level + " sourceIndex: " + category.getSourceIndex());
                     level++;
                     sourceIndex = category.getIndex();
                 } else {
-                    model.setViewName("/error");
-                    return model;
+                    modelAndView.setViewName("/error");
+                    return modelAndView;
                 }
             }
 
-            String parameter = pageNameArray[pageNameArray.length - 1];
-            model.addObject("parameter", parameter);
-            model.addObject("param", category.getPageName());
-            System.out.println();
-            System.out.println("home2");
-
-            model.addObject(ALL_MENU, getAllCategories());
-            model.addObject(SOURCE, VIDEOS);
-            model.setViewName("/public/index");
-
+            categoriesToShow = getSubOrSameLevelCategories(category, pageNameArray, categoriesPath);
         } else {
-            model.setViewName("/error");
+            categoriesToShow = (List<CategoryDTO>) request.getAttribute(ALL_MENU);
         }
-        return model;
+        System.out.println("home2");
+//        modelAndView.addObject(ALL_MENU, getAllCategories());
+        modelAndView.addObject(CURRENT_MENU, categoriesToShow);
+        modelAndView.addObject(ALL_MENU_SOURCE, VIDEOS);
+        modelAndView.addObject(CURRENT_MENU_SOURCE, categoriesPath.toString());
+        modelAndView.addObject("ajax", "lol");
+        modelAndView.setViewName("/public/index");
+        return modelAndView;
     }
 
-    private List<CategoryDTO> getAllCategories() {
-        List<CategoryDTO> allMenu = categoryService.getCategoryListByLevel(0);
+    public List<CategoryDTO> getAllCategories() {
+        List<CategoryDTO> allMenu = categoryService.getListByLevel(0);
         getSubCategories(allMenu);
         return allMenu;
     }
@@ -102,11 +104,28 @@ public class PublicController {
         return null;
     }
 
-    private void getSubCategories(CategoryDTO category) {
-        if(category != null) {
+    //Если нету подкатегорий, тогда возвращаем надкатегории
+    private List<CategoryDTO> getSubOrSameLevelCategories(CategoryDTO category, String[] pageNameArray, StringBuilder categoriesPath) {
+        if (getSubCategories(category)) {
+            for (String pageName : pageNameArray) {
+                categoriesPath.append("/").append(pageName);
+            }
+            return category.getSubCategoryList();
+        } else {
+            for (int i = 0; i < pageNameArray.length - 1; i++) {
+                categoriesPath.append("/").append(pageNameArray[i]);
+            }
+            return getSameLevelCategories(category);
+        }
+    }
+
+    private boolean getSubCategories(CategoryDTO category) {
+        boolean notEmpty = false;
+        if (category != null) {
             List<CategoryDTO> subCategories = categoryService.getSubCategories(category.getIndex());
 //            System.out.print("categoryName: " + category.getName());
             if (subCategories != null && subCategories.size() != 0) {
+                notEmpty = true;
                 category.setSubCategoryList(subCategories);
 //                System.out.println(" subCategories.size: " + subCategories.size());
                 for (CategoryDTO subCategory : subCategories) {
@@ -114,11 +133,20 @@ public class PublicController {
                 }
             }
         }
+        return notEmpty;
+    }
+
+    private List<CategoryDTO> getPreCategories(CategoryDTO category) {
+        return categoryService.getListPreCategoriesBySourceIndex(category.getSourceIndex());
+    }
+
+    private List<CategoryDTO> getSameLevelCategories(CategoryDTO category) {
+        return categoryService.getListInSameLevel(category.getSourceIndex());
     }
 
     private void getSubCategories(List<CategoryDTO> categories) {
-        if(categories != null && categories.size() != 0) {
-            for(CategoryDTO category : categories) {
+        if (categories != null && categories.size() != 0) {
+            for (CategoryDTO category : categories) {
 //                System.out.print("categoryName: " + category.getName());
                 List<CategoryDTO> subCategories = categoryService.getSubCategories(category.getIndex());
 //                System.out.println(" subCategories.size: " + subCategories.size());
@@ -126,6 +154,14 @@ public class PublicController {
                 getSubCategories(subCategories);
             }
         }
+    }
+
+    public List<CategoryDTO> getListByPageNameList(List<String> pageNameList) {
+        return categoryService.getListByPageNameList(pageNameList);
+    }
+
+    public CategoryDTO getByPageName(String pageName) {
+        return categoryService.getByPageName(pageName);
     }
 
     //        if(true) {

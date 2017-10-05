@@ -10,7 +10,8 @@
         <c:forEach var="category" items="${categories}">
             <li>
                 <c:set var="pageURL"><c:if test="${!empty pageName}">${pageName}/</c:if>${category.pageName}</c:set>
-                <a href="<c:url value="${source}/${pageURL}"/>">
+                <c:set var="sourceExist"><c:if test='${!empty source}'>${source}/</c:if></c:set>
+                <a href="<c:url value="/${sourceExist}${pageURL}"/>">
                     <div class="category_name">${category.name}</div>
                     <c:if test="${!empty category.subCategoryList}">
                         <div class="pointer">

@@ -7,11 +7,19 @@ import java.util.List;
 public interface CategoryService {
     void addCategory(CategoryDTO category);
 
-    CategoryDTO getCategoryByLevelSourceIndex(int level, int sourceIndex);
+    CategoryDTO getByLevelAndSourceIndex(int level, int sourceIndex);
 
-    CategoryDTO getCategoryByPageNameLevelSourceIndex(String pageName, int level, int sourceIndex);
+    List<CategoryDTO> getListPreCategoriesBySourceIndex(int sourceIndex);
 
-    List<CategoryDTO> getCategoryListByLevel(int level);
+    CategoryDTO getByPageNameAndLevelAndSourceIndex(String pageName, int level, int sourceIndex);
+
+    List<CategoryDTO> getListByLevel(int level);
 
     List<CategoryDTO> getSubCategories(int sourceIndex);
+
+    CategoryDTO getByPageName(String pageName);
+
+    List<CategoryDTO> getListInSameLevel(int sourceIndex);
+
+    List<CategoryDTO> getListByPageNameList(List<String> pageNameList);
 }
